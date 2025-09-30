@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipes App Landing - Chef Hat Button</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      /* Background is set to your kitchen image (cheff.png) */
+      background: url("cheff.png") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* ------------------------------------------- */
+    /* --- ENHANCED 3D Hat Button Styling --- */
+    /* ------------------------------------------- */
+    .hat-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      /* Increased perspective for a deeper 3D effect */
+      perspective: 1500px; 
+    }
+
+    .hat-button img {
+      width: 250px;
+      height: auto;
+      display: block;
+      /* Enhanced shadow for a high-floating look */
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+      
+      /* Smooth transitions for all transforms and shadows */
+      transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), filter 0.5s ease;
+      
+      /* Initial state: slightly floating forward */
+      transform: translateZ(10px); 
+    }
+
+    .hat-button:hover img {
+      /* Dramatically move forward on hover, making it pop out */
+      transform: translateZ(50px) scale(1.1); 
+      /* Larger, darker shadow for a clear floating illusion */
+      filter: drop-shadow(0 40px 60px rgba(0,0,0,0.9));
+    }
+
+    .hat-button:active img {
+      /* Dramatically move back into the screen on click */
+      transform: translateZ(-20px) scale(1.0);
+      /* Minimal shadow to simulate the button being 'pressed down' */
+      filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));
+      transition-duration: 0.1s; /* Quick press feedback */
+    }
+    /* ------------------------------------------- */
+
+  </style>
+</head>
+<body>
+
+  <button class="hat-button" onclick="goToRecipesPage()">
+    <img src="button.png">
+  </button>
+
+  <script>
+    /**
+     * Function to redirect the user to the main recipes page.
+     * REMEMBER TO REPLACE 'recipes.html' with the actual path to your next page.
+     */
+    function goToRecipesPage() {
+        // Redirects the browser to the specified URL
+        window.location.href = 'menu.html'; 
+    }
+  </script>
+
+</body>
+</html>

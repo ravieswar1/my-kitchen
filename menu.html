@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Recipes - Ravis Kitchen Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0077cc;
+            --secondary-color: #f7931e; /* Orange for accent/add button */
+            --text-color: #333;
+            --bg-light: #f4f4f9;
+            --card-bg: white;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+
+        /* --- Header/Navbar --- */
+        .header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            /* STYLED WORDS: Applied 'Playfair Display' for a decorative look */
+            font-family: 'Playfair Display', serif; 
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 2.2em; /* Made the title bigger */
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        }
+        
+        /* --- Search Bar & Icon --- */
+        .search-container {
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            padding: 5px 15px;
+            width: 400px;
+            max-width: 50%;
+        }
+        
+        .search-icon {
+            color: var(--primary-color);
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .search-container input {
+            border: none;
+            outline: none;
+            font-size: 1em;
+            flex-grow: 1;
+            padding: 5px 0;
+        }
+        
+        /* --- Add Recipe Button --- */
+        .add-recipe-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .add-recipe-btn:hover {
+            background-color: #e07b00;
+        }
+
+        /* --- Main Content & Recipe Grid --- */
+        .main-content {
+            padding: 30px;
+        }
+
+        .recipe-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding-top: 15px;
+        }
+
+        .recipe-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            position: relative; /* Crucial for positioning the remove button */
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            height: 200px;
+            background-color: #e0e0e0; /* Fallback color */
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-info {
+            padding: 15px;
+        }
+        
+        .card-info h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.5em;
+        }
+
+        .card-info p {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        /* New style for Not Found Message */
+        #notFoundMessage {
+            text-align: center;
+            grid-column: 1 / -1; /* Spans across all columns of the grid */
+            color: #cc0000;
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 50px 0;
+            display: none; /* Hidden by default */
+        }
+        
+        /* --- NEW STYLE: Small Remove Button on Corner --- */
+        .remove-btn-small {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            line-height: 1;
+            padding: 0;
+            border-radius: 50%; /* Make it round */
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5; /* Ensure it's above the image */
+            opacity: 0.8;
+            transition: opacity 0.2s, background-color 0.2s;
+        }
+
+        .remove-btn-small:hover {
+            background-color: #990000;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 onclick="window.location.href='menu.html'">Ravis kitchen hub 🍳</h1>
+        
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" onkeyup="filterRecipes()" placeholder="Search recipes, ingredients, or cuisines...">
+        </div>
+        
+        <button class="add-recipe-btn" onclick="openRecipe(null)">
+            + Add Recipe
+        </button>
+    </div>
+
+    <div class="main-content">
+        <h2>Explore Amazing Recipes</h2>
+        
+        <div class="recipe-list" id="recipeList">
+            
+            <div id="notFoundMessage">Recipe not found 😞</div>
+            
+            </div>
+    </div>
+
+    <script>
+        // Creates a clean, safe ID from the recipe title
+        function generateRecipeId(title) {
+            return 'user-recipe-' + title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+        }
+
+        // --- CORE NAVIGATION FUNCTION ---
+        function openRecipe(cardElement) {
+            let recipeName;
+            
+            if (cardElement === null) {
+                // Clicked '+ Add Recipe' button
+                localStorage.removeItem('selectedRecipeTitle');
+            } else {
+                // Clicked a recipe card
+                recipeName = cardElement.getAttribute('data-recipe-name');
+                localStorage.setItem('selectedRecipeTitle', recipeName);
+            }
+
+            window.location.href = 'recipe.html';
+        }
+
+        // --- Removes a user recipe from Local Storage and DOM ---
+        function removeRecipe(recipeTitle) {
+            // Confirmation prompt for safety
+            if (!confirm(`Are you sure you want to remove the recipe: "${recipeTitle}"?`)) {
+                return;
+            }
+            
+            // 1. Get existing recipes
+            const userRecipesJSON = localStorage.getItem('userRecipes');
+            let recipes = userRecipesJSON ? JSON.parse(userRecipesJSON) : [];
+            
+            // 2. Filter out the recipe to be removed
+            const updatedRecipes = recipes.filter(recipe => recipe.title !== recipeTitle);
+            
+            // 3. Save the updated list back to Local Storage
+            localStorage.setItem('userRecipes', JSON.stringify(updatedRecipes));
+            
+            // 4. Remove the card from the DOM
+            const cardId = generateRecipeId(recipeTitle);
+            const cardToRemove = document.getElementById(cardId);
+            if (cardToRemove) {
+                cardToRemove.remove();
+                // Re-apply filter in case the search bar is active
+                filterRecipes(); 
+            }
+        }
+
+        // Function to create and append a recipe card to the list
+        function createRecipeCard(recipe) {
+            const cardDiv = document.createElement('div');
+            cardDiv.id = generateRecipeId(recipe.title);
+            cardDiv.className = 'recipe-card user-recipe'; 
+            cardDiv.setAttribute('data-recipe-name', recipe.title);
+            
+            // Add the REMOVE button
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn-small'; 
+            removeBtn.textContent = 'X'; 
+            removeBtn.setAttribute('onclick', `event.stopPropagation(); removeRecipe('${recipe.title.replace(/'/g, "\\'")}')`);
+            cardDiv.appendChild(removeBtn);
+            
+            // Wrapper for opening recipe details on card click
+            cardDiv.setAttribute('onclick', 'openRecipe(this)'); 
+
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'card-image';
+            
+            // *** THIS IS THE KEY LINE: Uses the Base64 Data URL or Placeholder from recipe.image ***
+            imageDiv.style.backgroundImage = `url('${recipe.image}')`; 
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'card-info';
+            
+            const titleH3 = document.createElement('h3');
+            titleH3.className = 'recipe-title';
+            titleH3.textContent = recipe.title;
+            
+            const summaryP = document.createElement('p');
+            summaryP.textContent = recipe.summary; 
+
+            infoDiv.appendChild(titleH3);
+            infoDiv.appendChild(summaryP);
+            
+            cardDiv.appendChild(imageDiv);
+            cardDiv.appendChild(infoDiv);
+            
+            return cardDiv;
+        }
+
+        // Function to load recipes from Local Storage and display them
+        function loadAndDisplayUserRecipes() {
+            const recipeList = document.getElementById('recipeList');
+            document.querySelectorAll('.recipe-card.user-recipe').forEach(card => card.remove());
+
+            const userRecipesJSON = localStorage.getItem('userRecipes');
+            
+            if (userRecipesJSON) {
+                const userRecipes = JSON.parse(userRecipesJSON);
+                
+                // Render user-submitted recipes
+                userRecipes.forEach(recipe => {
+                    const card = createRecipeCard(recipe);
+                    recipeList.insertBefore(card, document.getElementById('notFoundMessage'));
+                });
+            }
+            
+            filterRecipes();
+        }
+
+        function filterRecipes() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const list = document.getElementById('recipeList');
+            const cards = list.getElementsByClassName('recipe-card');
+            const notFound = document.getElementById('notFoundMessage');
+            let foundCount = 0;
+
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const titleElement = card.querySelector('.recipe-title');
+                if (!titleElement) continue; 
+                
+                const title = titleElement.textContent.toUpperCase();
+                const description = card.querySelector('.card-info p').textContent.toUpperCase();
+                
+                if (title.includes(filter) || description.includes(filter)) {
+                    card.style.display = 'block';
+                    foundCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+
+            if (foundCount === 0) {
+                notFound.style.display = 'block';
+            } else {
+                notFound.style.display = 'none';
+            }
+        }
+        
+        // Execute on page load
+        loadAndDisplayUserRecipes();
+    </script>
+
+</body>
+</html>

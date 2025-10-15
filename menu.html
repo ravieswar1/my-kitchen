@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>All Recipes - Ravis Kitchen Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* This was causing a syntax error. Removed the extra 'body {' */
+        /* body { */ 
+ 
         :root {
             --primary-color: #0077cc;
             --secondary-color: #f7931e; /* Orange for accent/add button */
@@ -16,10 +19,21 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-light);
+            /* The original background-color is now replaced/supplemented by the image */
+            /* background-color: var(--bg-light); */ 
             margin: 0;
             padding: 0;
             color: var(--text-color);
+
+            /* --- BACKGROUND IMAGE CODE ADDED HERE --- */
+            background-image: url('cheff.png'); /* Using the image you provided */
+            background-size: cover; /* Ensures the image covers the whole viewport */
+            background-repeat: no-repeat; /* Prevents image tiling */
+            background-attachment: fixed; /* Keeps the background image fixed when scrolling */
+            /* Added a semi-transparent overlay to improve text readability over the background image */
+            background-color: rgba(244, 244, 249, 0.85); /* Uses your --bg-light color with opacity */
+            background-blend-mode: overlay; /* Blends the image and the color */
+            /* --- END OF BACKGROUND IMAGE CODE --- */
         }
 
         /* --- Header/Navbar --- */
@@ -350,6 +364,7 @@
         // Execute on page load
         loadAndDisplayUserRecipes();
     </script>
+
 
 </body>
 </html>

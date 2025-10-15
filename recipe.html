@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="pageTitle">Add New Recipe</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -16,18 +16,28 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-light);
+            /* background-color: var(--bg-light); -- Removed or overridden for the blend effect */
             margin: 0;
             padding: 20px;
             color: var(--text-color);
             min-height: 100vh;
+            
+            /* --- BACKGROUND IMAGE CODE ADDED HERE --- */
+            background-image: url('cheff.png'); 
+            background-size: cover; /* Scale to cover the viewport */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Fixes the image when scrolling */
+            /* Add blend mode to ensure readability and use the background color as a tint */
+            background-color: rgba(244, 244, 249, 0.9); /* Lighter tint for the dark image */
+            background-blend-mode: overlay;
+            /* --- END BACKGROUND IMAGE CODE --- */
         }
 
         .container {
             max-width: 800px;
             margin: 40px auto;
             padding: 30px;
-            background-color: var(--form-bg);
+            background-color: rgba(255, 255, 255, 0.95); /* Changed from var(--form-bg) to have slight transparency */
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
